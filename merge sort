@@ -1,0 +1,81 @@
+#include <iostream>
+
+using namespace std;
+
+// Fungsi untuk menggabungkan dua subarray
+void gabung(int arr[], int kiri, int tengah, int kanan) {
+    int n1 = tengah - kiri + 1;
+    int n2 = kanan - tengah;
+
+    // Membuat array sementara
+    int kiriArr[n1], kananArr[n2];
+
+    // Menyalin data ke array sementara
+    for (int i = 0; i < n1; i++)
+        kiriArr[i] = arr[kiri + i];
+    for (int j = 0; j < n2; j++)
+        kananArr[j] = arr[tengah + 1 + j];
+
+    // Menggabungkan array sementara kembali ke array asli
+    int i = 0, j = 0, k = kiri;
+    while (i < n1 && j < n2) {
+        if (kiriArr[i] <= kananArr[j]) {
+            arr[k] = kiriArr[i];
+            i++;
+        } else {
+            arr[k] = kananArr[j];
+            j++;
+        }
+        k++;
+    }
+
+    // Menyalin sisa elemen kiriArr, jika ada
+    while (i < n1) {
+        arr[k] = kiriArr[i];
+        i++;
+        k++;
+    }
+
+    // Menyalin sisa elemen kananArr, jika ada
+    while (j < n2) {
+        arr[k] = kananArr[j];
+        j++;
+        k++;
+    }
+}
+
+// Fungsi utama untuk mengurutkan array menggunakan Merge Sort
+void mergeSort(int arr[], int kiri, int kanan) {
+    if (kiri < kanan) {
+        int tengah = kiri + (kanan - kiri) / 2;
+
+        // Mengurutkan paruh pertama dan kedua
+        mergeSort(arr, kiri, tengah);
+        mergeSort(arr, tengah + 1, kanan);
+
+        // Menggabungkan paruh yang telah diurutkan
+        gabung(arr, kiri, tengah, kanan);
+    }
+}
+
+// Fungsi untuk mencetak array
+void cetakArray(int arr[], int ukuran) {
+    for (int i = 0; i < ukuran; i++)
+        cout << arr[i] << " ";
+    cout << endl;
+}
+
+int main() {
+    int arr[] = {12, 11, 13, 5, 6, 7};
+    int ukuran = sizeof(arr) / sizeof(arr[0]);
+
+    cout << "Array sebelum diurutkan: ";
+    cetakArray(arr, ukuran);
+
+    mergeSort(arr, 0, ukuran - 1);
+
+    cout << "Array setelah diurutkan: ";
+    cetakArray(arr, ukuran);
+
+    return 0;
+}
