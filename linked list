@@ -1,0 +1,86 @@
+#include <iostream>
+
+using namespace std;
+
+// Definisi struktur node
+struct Node {
+    int data;
+    Node* next;
+};
+
+// Fungsi untuk menambahkan node di akhir linked list
+void tambah(Node*& head, int dataBaru) {
+    Node* nodeBaru = new Node();
+    nodeBaru->data = dataBaru;
+    nodeBaru->next = NULL;
+
+    if (head == NULL) {
+        head = nodeBaru;
+        return;
+    }
+
+    Node* temp = head;
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+    temp->next = nodeBaru;
+}
+
+// Fungsi untuk menampilkan isi linked list
+void tampil(Node* node) {
+    while (node != NULL) {
+        cout << node->data << " -> ";
+        node = node->next;
+    }
+    cout << "NULL" << endl;
+}
+
+// Fungsi untuk menghapus node pertama yang mengandung nilai tertentu
+void hapus(Node*& head, int key) {
+    Node* temp = head;
+    Node* prev = NULL;
+
+    // Jika head node mengandung nilai yang ingin dihapus
+    if (temp != NULL && temp->data == key) {
+        head = temp->next;
+        delete temp;
+        return;
+    }
+
+    // Mencari node yang mengandung nilai yang ingin dihapus
+    while (temp != NULL && temp->data != key) {
+        prev = temp;
+        temp = temp->next;
+    }
+
+    // Jika nilai tidak ditemukan dalam linked list
+    if (temp == NULL) return;
+
+    // Melepaskan node dari linked list
+    prev->next = temp->next;
+    delete temp;
+}
+
+int main() {
+    Node* head = NULL;
+
+    // Menambahkan elemen ke linked list
+    tambah(head, 1);
+    tambah(head, 2);
+    tambah(head, 3);
+    tambah(head, 4);
+    tambah(head, 5);
+
+    // Menampilkan linked list
+    cout << "Linked list: ";
+    tampil(head);
+
+    // Menghapus node dengan nilai 2
+    hapus(head, 2);
+
+    // Menampilkan linked list setelah penghapusan
+    cout << "Linked list setelah menghapus nilai 2: ";
+    tampil(head);
+
+    return 0;
+}
